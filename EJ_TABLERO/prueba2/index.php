@@ -22,13 +22,17 @@ function getTableroMArkup ($tablero, $batman){
         foreach ($datosFila as $columnaIndex => $tileType) {
             //dump($tileType);
             $contador++;
-            if($contador == $batman){
-                $output .= '<div class = "tile ' . $tileType . '">';
-                $output .= pintarBatman();
-                $output .= '</div>';
-            }else{
-                $output .= '<div class = "tile ' . $tileType . '"></div>';
-            }
+         
+                if($contador == $batman){
+                    $output .= '<div class = "tile ' . $tileType . '">';
+                    if(isset($batman)){
+                    $output .= pintarBatman();
+                    }
+                    $output .= '</div>';
+                }else{
+                    $output .= '<div class = "tile ' . $tileType . '"></div>';
+                }
+            
         }
     }
 
@@ -56,11 +60,20 @@ function leerArchivoCSV($archivoCSV) {
 
 $tablero = leerArchivoCSV('contenido_tablero/contenido.csv');
 
-$batman = rand(0, 143);
+$batman = null;
 
 function pintarBatman(){
     return '<img src="batman2.png">';
 }
+
+if (isset($_GET['fila']) && isset($_GET['columna']) && $_GET['fila'] > 0 && $_GET['fila'] <= 12 && $_GET['columna'] > 0 && $_GET['columna'] <= 12) {
+
+$fila=$_GET['fila'];
+
+$columna=$_GET['columna'];
+$batman = (($fila*12-12)+ $columna);
+}
+
 
 
 //Lógica de presentación
@@ -117,6 +130,9 @@ $tableroMarkup = getTableroMArkup($tablero, $batman);
     <h1>Tablero juego super rol DWES</h1>
     <div class="contenedorTablero">
         <?php echo $tableroMarkup; ?>
+  
     </div>
+
+ 
 </body>
 </html>
